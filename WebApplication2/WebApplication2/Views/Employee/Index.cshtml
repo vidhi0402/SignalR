@@ -1,0 +1,87 @@
+﻿@using WebApplication2.Models
+
+@model IEnumerable<Employees>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+</head>
+<body>
+    @using (Html.BeginForm("Index", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="submit" value="Show Data" />
+    }
+
+    @section JavaScript{
+        <script src="~/Scripts/jquery.signalR-2.4.3.js"></script>
+        <script src="~/Hubs/"></script>
+        <script type="text/javascript">
+
+            $(function () {
+                // Create a proxy to signalr hub on web server. It reference the hub.
+                var notificationFromHub = $.connection.MyHub;
+
+                // Connect to signalr hub
+                $.connection.hub.start().done(function () {
+                    FetchEmployees();
+                });
+
+                // Notify to client with the recent updates
+                notificationFromHub.Client.updatedClients = function () {
+                    FetchEmployees();
+                };
+            });
+            function FetchEmployees() {
+                var model = $('#dataTable');
+                $.ajax({
+                    url: '/Employee/Index',
+                    contentType: 'application/html ; charset:utf-8',
+                    type: 'GET',
+                    dataType: 'html'
+                })
+                    .success(function (result) { model.empty().append(result); })
+            }
+
+        </script>
+    }
+
+
+    @if (Model.Count() > 0)
+    {
+        <hr />
+        <table cellpadding="0" cellspacing="0">
+
+
+            @foreach (Employees employees in Model)
+            {
+                <tr>
+                    <td>@employees.FileName</td>
+                    <td>@employees.EmployeeName</td>
+                    <td>@employees.Salary</td>
+                    <td>@employees.Email</td>
+                    <td>@employees.Mobile</td>
+                    <td>@employees.Qualification</td>
+                    <td>@employees.FirstName</td>
+                    <td>@employees.MiddleName</td>
+                    <td>@employees.LastName</td>
+                    <td>@employees.Address1</td>
+                    <td>@employees.Address2</td>
+                    <td>@employees.Address3</td>
+                    <td>@employees.City</td>
+                    <td>@employees.State</td>
+
+                </tr>
+            }
+
+        </table>
+
+    }
+
+</body>
+</html>
+

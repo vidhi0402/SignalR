@@ -1,0 +1,26 @@
+﻿<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>EmployeeID</th>
+            <th>EmployeeName</th>
+            <th>Employee Department</th>
+            <th>Salary</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+
+                <tr>
+                    <td>@item.EmployeeID</td>
+                    <td>@item.EmployeeName</td>
+                    <td>@item.EmployeeDepartment</td>
+                    <td>@item.Salary</td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
